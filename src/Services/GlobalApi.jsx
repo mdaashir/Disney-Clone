@@ -6,4 +6,4 @@ const getTrendingVideos = axios.get(
 	movieBaseUrl + '/trending/all/day?api_key=' + api_key
 );
 
-export default getTrendingVideos;
+export default { getTrendingVideos };

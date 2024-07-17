@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
-import getTrendingVideos from '../Services/GlobalApi';
 import { HiChevronRight, HiChevronLeft } from 'react-icons/hi2';
+import GlobalApi from '../Services/GlobalApi';
 
 const IMAGE_BASE_URL = 'https://image.tmdb.org/t/p/original';
 const screenWidth = window.innerWidth;
@@ -12,7 +12,7 @@ function Slider() {
 		getTrendingMovies();
 	}, []);
 	const getTrendingMovies = () => {
-		getTrendingVideos.then((resp) => {
+		GlobalApi.getTrendingVideos.then((resp) => {
 			setMovieList(resp.data.results);
 		});
 	};
