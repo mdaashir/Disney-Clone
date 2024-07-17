@@ -2,7 +2,6 @@ import React, { useEffect, useRef, useState } from 'react';
 import { HiChevronRight, HiChevronLeft } from 'react-icons/hi2';
 import GlobalApi from '../Services/GlobalApi';
 
-const IMAGE_BASE_URL = 'https://image.tmdb.org/t/p/original';
 const screenWidth = window.innerWidth;
 
 function Slider() {
@@ -45,7 +44,7 @@ function Slider() {
 				{movieList.map((item, index) => (
 					<img
 						// @ts-ignore
-						src={IMAGE_BASE_URL + item.backdrop_path}
+						src={GlobalApi.imageBaseUrl + item.backdrop_path}
 						className='min-w-full md:h-[310px] object-cover object-left-top mr-5 rounded-md hover:border-[4px] border-gray-400 transition-all duration-100 ease-in'
 						key={index}
 					/>
