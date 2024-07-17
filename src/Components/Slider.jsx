@@ -13,7 +13,6 @@ function Slider() {
 	}, []);
 	const getTrendingMovies = () => {
 		getTrendingVideos.then((resp) => {
-			console.log(resp.data.results);
 			setMovieList(resp.data.results);
 		});
 	};
