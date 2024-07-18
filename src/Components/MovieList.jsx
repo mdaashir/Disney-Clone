@@ -36,7 +36,7 @@ function MovieList({ genreId, index_ }) {
 			<div
 				className='flex overflow-x-auto gap-8 scrollbar-none scroll-smooth pt-5 px-3 pb-5'
 				ref={elementRef}>
-				{MovieList.map((item) => (
+				{MovieList.map((item,index_) => (
 					<div key={index_}>
 						{index_ % 3 == 0 ? (
 							<HrMovieCard movie={item} />
