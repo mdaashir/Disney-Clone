@@ -34,16 +34,16 @@ function MovieList({ genreId, index_ }) {
 				}}
 			/>
 			<div
-				className='flex overflow-x-auto gap-8 scrollbar-none scroll-smooth pt-5 px-3 pb-5'
+				className='flex overflow-x-auto gap-8 scrollbar-none scroll-smooth pt-4 px-3 pb-4'
 				ref={elementRef}>
-				{MovieList.map((item,index_) => (
-					<div key={index_}>
+				{MovieList.map((item, index) => (
+					<>
 						{index_ % 3 == 0 ? (
-							<HrMovieCard movie={item} />
+							<HrMovieCard movie={item} key={index} />
 						) : (
-							<MovieCard movie={item} />
+							<MovieCard movie={item} key={index} />
 						)}
-					</div>
+					</>
 				))}
 			</div>
 			<IoChevronForwardOutline
