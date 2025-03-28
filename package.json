@@ -1,9 +1,8 @@
 {
 	"name": "disney-clone",
 	"private": true,
-	"version": "0.1.1",
+	"version": "1.2.0",
 	"type": "module",
-	"homepage": "https://disney.mdaashir.tech/",
 	"scripts": {
 		"dev": "vite",
 		"build": "vite build",
