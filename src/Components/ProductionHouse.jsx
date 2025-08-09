@@ -1,5 +1,5 @@
 // @ts-nocheck
-import React from 'react';
+ 
 import disney from '../Assets/Images/disney.png';
 import marvel from '../Assets/Images/marvel.png';
 import nationalG from '../Assets/Images/nationalG.png';
@@ -43,10 +43,11 @@ function ProductionHouse() {
 	return (
 		<div className='flex gap-2 md:gap-5 p-2 px-5 md:px-16 '>
 			{productionHouseList.map((item) => (
-				<div
-					className='border-[2px] border-gray-600 rounded-lg hover:scale-110 transition-all duration-300
-					ease-in-out cursor-pointer relative shadow-xl shadow-gray-800'
-					key={item.id}>
+				<button
+					className='border-[2px] border-gray-600 rounded-lg hover:scale-110 transition-all duration-300 ease-in-out cursor-pointer relative shadow-xl shadow-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-400'
+					key={item.id}
+					type='button'
+					aria-label={"Play " + item.id}>
 					<video
 						src={item.video}
 						autoPlay
@@ -55,8 +56,8 @@ function ProductionHouse() {
 						muted
 						className='absolute top-0 rounded-md z-0 opacity-0 hover:opacity-50'
 					/>
-					<img src={item.image} className='w-full z-[1] opacity-100' />
-				</div>
+					<img src={item.image} alt='Brand logo' className='w-full z-[1] opacity-100' />
+				</button>
 			))}
 		</div>
 	);
