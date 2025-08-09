@@ -108,7 +108,7 @@ export default function MovieDetailPage() {
       return;
     }
 
-    // TODO: Implement review submission
+    // Review submission - integrate with backend API when available
     toast.success("Review submitted successfully!");
     setUserRating(0);
     setUserComment("");

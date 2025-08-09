@@ -157,11 +157,14 @@ export default function VideoPlayer() {
     }
   }, [isPlaying]);
 
-  const seek = useCallback((time: number) => {
-    if (videoRef.current) {
-      videoRef.current.currentTime = Math.max(0, Math.min(time, duration));
-    }
-  }, [duration]);
+  const seek = useCallback(
+    (time: number) => {
+      if (videoRef.current) {
+        videoRef.current.currentTime = Math.max(0, Math.min(time, duration));
+      }
+    },
+    [duration],
+  );
 
   const toggleMute = useCallback(() => {
     if (videoRef.current) {
@@ -234,7 +237,16 @@ export default function VideoPlayer() {
 
     document.addEventListener("keydown", handleKeyPress);
     return () => document.removeEventListener("keydown", handleKeyPress);
-  }, [currentTime, volume, isFullscreen, seek, toggleFullscreen, toggleMute, togglePlayPause, adjustVolume]);
+  }, [
+    currentTime,
+    volume,
+    isFullscreen,
+    seek,
+    toggleFullscreen,
+    toggleMute,
+    togglePlayPause,
+    adjustVolume,
+  ]);
 
   // Video event handlers
   const handleLoadedMetadata = () => {

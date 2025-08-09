@@ -1,5 +1,13 @@
 import { useEffect, useRef } from "react";
 
+// Development-only logging helper
+const devLog = (...args: any[]) => {
+  if (import.meta.env.DEV) {
+    // eslint-disable-next-line no-console
+    console.log(...args);
+  }
+};
+
 // Extend Window interface for gtag
 declare global {
   // eslint-disable-next-line no-unused-vars
@@ -21,9 +29,8 @@ export function usePerformanceMonitor(componentName?: string) {
       const renderTime = Date.now() - renderStart.current;
 
       if (renderTime > threshold) {
-        // Performance warning - legitimate use
-        // eslint-disable-next-line no-console
-        console.log(`${componentName} render time:`, renderTime, "ms");
+        // Performance monitoring - development only
+        devLog(`${componentName} render time:`, renderTime, "ms");
       }
 
       // Report to analytics if available
@@ -47,8 +54,7 @@ export function initWebVitalsMonitoring() {
   const observer = new PerformanceObserver((list) => {
     for (const entry of list.getEntries()) {
       if (entry.name === "first-contentful-paint") {
-        // eslint-disable-next-line no-console
-        console.log("FCP:", entry.startTime);
+        devLog("FCP:", entry.startTime);
         reportMetric("fcp", entry.startTime);
       }
     }
@@ -64,8 +70,7 @@ export function initWebVitalsMonitoring() {
   const lcpObserver = new PerformanceObserver((list) => {
     const entries = list.getEntries();
     const lastEntry = entries[entries.length - 1];
-    // eslint-disable-next-line no-console
-    console.log("LCP:", lastEntry.startTime);
+    devLog("LCP:", lastEntry.startTime);
     reportMetric("lcp", lastEntry.startTime);
   });
 
@@ -87,10 +92,8 @@ export function initWebVitalsMonitoring() {
           navigation.domContentLoadedEventStart;
         const windowLoad = navigation.loadEventEnd - navigation.loadEventStart;
 
-        // eslint-disable-next-line no-console
-        console.log("DOM Load:", domLoad);
-        // eslint-disable-next-line no-console
-        console.log("Window Load:", windowLoad);
+        devLog("DOM Load:", domLoad);
+        devLog("Window Load:", windowLoad);
 
         reportMetric("domLoad", domLoad);
         reportMetric("windowLoad", windowLoad);
@@ -133,8 +136,7 @@ export function monitorResources() {
     for (const entry of list.getEntries()) {
       if (entry.entryType === "resource") {
         const resource = entry as any;
-        // eslint-disable-next-line no-console
-        console.log("Resource loaded:", {
+        devLog("Resource loaded:", {
           name: entry.name,
           duration: entry.duration,
           size: resource.transferSize || 0,
@@ -160,8 +162,7 @@ export function initPerformanceMonitoring() {
     setInterval(() => {
       const memory = getMemoryInfo();
       if (memory) {
-        // eslint-disable-next-line no-console
-        console.log("Memory usage:", memory);
+        devLog("Memory usage:", memory);
       }
     }, 30000); // Every 30 seconds
   }

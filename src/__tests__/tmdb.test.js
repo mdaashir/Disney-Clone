@@ -15,6 +15,9 @@ const mockResults = [
 
 describe("tmdb api", () => {
   beforeEach(async () => {
+    // Clear previous calls
+    vi.clearAllMocks();
+
     // Dynamic import AFTER mock so axios mock is used
     ({ fetchTrending, fetchByGenre } = await import("../../src/api/tmdb"));
     client.get.mockImplementation((url) => {
@@ -38,7 +41,7 @@ describe("tmdb api", () => {
     const results = await fetchByGenre(28);
     expect(results).toEqual(mockResults);
     expect(client.get).toHaveBeenCalledWith("/discover/movie", {
-      params: { with_genres: 28 },
+      params: { with_genres: 28, page: 1 },
     });
   });
 });

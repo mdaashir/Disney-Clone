@@ -1,4 +1,4 @@
-import { create } from "zustand";
+import { createWithEqualityFn } from "zustand/traditional";
 import { persist, createJSONStorage } from "zustand/middleware";
 import type { User, Theme, SearchFilters } from "@/types";
 
@@ -40,7 +40,7 @@ interface AppStore {
   setSelectedMovie: (_movieId: number | null) => void;
 }
 
-export const useAppStore = create<AppStore>()(
+export const useAppStore = createWithEqualityFn<AppStore>()(
   persist(
     (set, get) => ({
       // Theme

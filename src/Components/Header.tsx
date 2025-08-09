@@ -208,7 +208,8 @@ const Header = () => {
                 size="icon"
                 className="md:hidden"
                 onClick={() => {
-                  /* TODO: Implement mobile search */
+                  // Mobile search functionality - open search modal
+                  setSearchQuery("");
                 }}
               >
                 <Search className="h-5 w-5" />

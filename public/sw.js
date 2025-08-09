@@ -25,19 +25,30 @@ const API_ENDPOINTS = [
 // Image domains to cache
 const IMAGE_DOMAINS = ["image.tmdb.org", "img.youtube.com"];
 
+// Development logging helper
+const swLog = (...args) => {
+  // Only log in development
+  if (
+    self.location.hostname === "localhost" ||
+    self.location.hostname === "127.0.0.1"
+  ) {
+    console.log(...args);
+  }
+};
+
 // Install event - cache static assets
 self.addEventListener("install", (event) => {
-  console.log("Service Worker installing...");
+  swLog("Service Worker installing...");
 
   event.waitUntil(
     caches
       .open(CACHE_NAME)
       .then((cache) => {
-        console.log("Caching static assets");
+        swLog("Caching static assets");
         return cache.addAll(STATIC_ASSETS);
       })
       .then(() => {
-        console.log("Static assets cached");
+        swLog("Static assets cached");
         return self.skipWaiting();
       }),
   );
@@ -45,28 +56,31 @@ self.addEventListener("install", (event) => {
 
 // Activate event - clean up old caches
 self.addEventListener("activate", (event) => {
-  console.log("Service Worker activating...");
+  swLog("Service Worker activating...");
 
   event.waitUntil(
     caches
       .keys()
       .then((cacheNames) => {
         return Promise.all(
-          cacheNames.map((cacheName) => {
-            // Delete old cache versions
-            if (
-              cacheName !== CACHE_NAME &&
-              cacheName !== API_CACHE_NAME &&
-              cacheName !== IMAGE_CACHE_NAME
-            ) {
-              console.log("Deleting old cache:", cacheName);
+          cacheNames
+            .filter((cacheName) => {
+              // Delete old versions of our cache
+              return (
+                cacheName.startsWith("disney-clone-") &&
+                cacheName !== CACHE_NAME &&
+                cacheName !== API_CACHE_NAME &&
+                cacheName !== IMAGE_CACHE_NAME
+              );
+            })
+            .map((cacheName) => {
+              swLog("Deleting old cache:", cacheName);
               return caches.delete(cacheName);
-            }
-          }),
+            }),
         );
       })
       .then(() => {
-        console.log("Service Worker activated");
+        swLog("Service Worker activated");
         return self.clients.claim();
       }),
   );
@@ -163,7 +177,7 @@ async function networkFirst(request, cacheName) {
 
     return response;
   } catch (error) {
-    console.log("Network failed, trying cache:", error);
+    swLog("Network failed, trying cache:", error);
     const cache = await caches.open(cacheName);
     const cached = await cache.match(request);
 
@@ -198,7 +212,7 @@ async function networkFirstWithFallback(request, cacheName) {
 
     return response;
   } catch (error) {
-    console.log("API request failed, trying cache:", error);
+    swLog("API request failed, trying cache:", error);
     const cache = await caches.open(cacheName);
     const cached = await cache.match(request);
 
@@ -209,7 +223,7 @@ async function networkFirstWithFallback(request, cacheName) {
         const age = Date.now() - parseInt(cacheTimestamp);
         if (age > 3600000) {
           // 1 hour
-          console.log("Cached API response is stale");
+          swLog("Cached API response is stale");
         }
       }
       return cached;
@@ -258,7 +272,7 @@ self.addEventListener("sync", (event) => {
 
 async function handleBackgroundSync() {
   // Handle queued requests when back online
-  console.log("Handling background sync...");
+  swLog("Handling background sync...");
 
   // You can implement request queuing here
   // For example, sync user data, watchlist updates, etc.
@@ -299,8 +313,8 @@ self.addEventListener("notificationclick", (event) => {
     // Handle view action
     event.waitUntil(clients.openWindow(event.notification.data?.url || "/"));
   } else if (event.action === "dismiss") {
-    // Handle dismiss action
-    console.log("Notification dismissed");
+    // Action button clicked: Dismiss
+    swLog("Notification dismissed");
   } else {
     // Default action
     event.waitUntil(clients.openWindow("/"));
@@ -342,19 +356,28 @@ async function clearAllCaches() {
 
 // Periodic cleanup
 setInterval(() => {
-  cleanupOldCaches();
+  cleanupCache();
 }, 86400000); // Daily cleanup
 
-async function cleanupOldCaches() {
-  console.log("Running cache cleanup...");
+async function cleanupCache() {
+  swLog("Running cache cleanup...");
 
-  const imageCacheLimit = 100; // Limit image cache size
-  const cache = await caches.open(IMAGE_CACHE_NAME);
-  const keys = await cache.keys();
+  const imageCache = await caches.open(IMAGE_CACHE_NAME);
+  const keys = await imageCache.keys();
 
-  if (keys.length > imageCacheLimit) {
-    const keysToDelete = keys.slice(0, keys.length - imageCacheLimit);
-    await Promise.all(keysToDelete.map((key) => cache.delete(key)));
-    console.log(`Cleaned up ${keysToDelete.length} old cached images`);
+  // Delete cached images older than 24 hours
+  const keysToDelete = [];
+  for (const request of keys) {
+    const response = await imageCache.match(request);
+    if (response) {
+      const timestamp = response.headers.get("sw-cache-timestamp");
+      if (timestamp && Date.now() - parseInt(timestamp) > 86400000) {
+        // 24 hours
+        keysToDelete.push(request);
+      }
+    }
   }
+
+  await Promise.all(keysToDelete.map((key) => imageCache.delete(key)));
+  swLog(`Cleaned up ${keysToDelete.length} old cached images`);
 }

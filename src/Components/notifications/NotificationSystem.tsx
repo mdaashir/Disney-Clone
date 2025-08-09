@@ -17,16 +17,18 @@ export interface Notification {
   createdAt: Date;
 }
 
+/* eslint-disable no-unused-vars */
 interface NotificationContextType {
   notifications: Notification[];
-  // eslint-disable-next-line no-unused-vars
-  addNotification: (notification: Omit<Notification, "id" | "createdAt">) => void;
-  // eslint-disable-next-line no-unused-vars
+
+  addNotification: (
+    notification: Omit<Notification, "id" | "createdAt">,
+  ) => void;
   removeNotification: (id: string) => void;
   clearAllNotifications: () => void;
-  // eslint-disable-next-line no-unused-vars
   markAsRead: (id: string) => void;
 }
+/* eslint-enable no-unused-vars */
 
 const NotificationContext = createContext<NotificationContextType | null>(null);
 

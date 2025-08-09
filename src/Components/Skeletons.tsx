@@ -1,4 +1,4 @@
-import PropTypes from 'prop-types';
+import PropTypes from "prop-types";
 
 // Generic pulse skeleton block
 export function SkeletonBlock({ className = "" }) {
@@ -50,7 +50,7 @@ export function MovieRowSkeleton({ count = 8, variant = "poster" }) {
 
 MovieRowSkeleton.propTypes = {
   count: PropTypes.number,
-  variant: PropTypes.oneOf(['poster', 'backdrop']),
+  variant: PropTypes.oneOf(["poster", "backdrop"]),
 };
 
 export default { SkeletonBlock, SliderSkeleton, MovieRowSkeleton };

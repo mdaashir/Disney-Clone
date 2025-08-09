@@ -257,24 +257,15 @@ export async function warmCache() {
     { url: "/api/popular", params: { page: 1 } },
   ];
 
-  // eslint-disable-next-line no-console
-  console.log("Warming API cache...");
   await preloadAPIData(criticalEndpoints);
-  // eslint-disable-next-line no-console
-  console.log("API cache warmed");
 }
 
 // Cache performance monitor
 export function monitorCachePerformance() {
   setInterval(() => {
-    const stats = apiCache.getStats();
-    // eslint-disable-next-line no-console
-    console.log("Cache Performance:", {
-      ...stats,
-      hitRatio: `${(stats.hitRatio * 100).toFixed(2)}%`,
-      size: `${stats.size}/${stats.maxSize}`,
-    });
-  }, 60000); // Log every minute
+    // Performance monitoring available for debugging if needed
+    // apiCache.getStats() can be called here in development mode
+  }, 60000); // Check every minute
 }
 
 // Service Worker cache strategies

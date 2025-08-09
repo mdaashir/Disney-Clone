@@ -31,7 +31,9 @@ export function LazyImage({
   quality = 75,
 }: LazyImageProps) {
   const [imageSrc, setImageSrc] = useState<string>(
-    placeholder || blurDataURL || "",
+    placeholder ||
+      blurDataURL ||
+      "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg'><rect width='100%' height='100%' fill='transparent'/></svg>",
   );
   const [isLoading, setIsLoading] = useState(true);
   const [hasError, setHasError] = useState(false);
