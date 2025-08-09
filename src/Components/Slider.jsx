@@ -2,7 +2,7 @@ import { useRef } from "react";
 import { HiChevronRight, HiChevronLeft } from "react-icons/hi2";
 import { useQuery } from "@tanstack/react-query";
 import { SliderSkeleton } from "./Skeletons";
-import { fetchTrending, imageBaseUrl } from "../api/tmdb";
+import { fetchTrending, imageBaseUrl } from "@/api/tmdb";
 
 function Slider() {
   const elementRef = useRef(null);

@@ -4,7 +4,7 @@ import { IoChevronBackOutline, IoChevronForwardOutline } from "react-icons/io5";
 import HrMovieCard from "./HrMovieCard";
 import { useQuery } from "@tanstack/react-query";
 import { MovieRowSkeleton } from "./Skeletons";
-import { fetchByGenre } from "../api/tmdb";
+import { fetchByGenre } from "@/api/tmdb";
 
 function MovieList({ genreId, index_ }) {
   const elementRef = useRef(null);

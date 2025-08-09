@@ -1,4 +1,4 @@
-import { imageBaseUrl } from "../api/tmdb";
+import { imageBaseUrl } from "@/api/tmdb";
 import PropTypes from "prop-types";
 
 function MovieCard({ movie }) {
