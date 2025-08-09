@@ -1,7 +1,11 @@
 {
 	"name": "disney-clone",
 	"private": true,
+<<<<<<< HEAD
 	"version": "1.2.0",
+=======
+	"version": "0.1.2",
+>>>>>>> Developement
 	"type": "module",
 	"scripts": {
 		"dev": "vite",
