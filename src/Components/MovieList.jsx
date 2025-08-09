@@ -1,9 +1,11 @@
 import { useRef } from 'react';
+import PropTypes from 'prop-types';
 import GlobalApi from '../Services/GlobalApi';
 import MovieCard from './MovieCard';
 import { IoChevronBackOutline, IoChevronForwardOutline } from 'react-icons/io5';
 import HrMovieCard from './HrMovieCard';
 import { useQuery } from '@tanstack/react-query';
+import Skeleton from './Skeleton';
 
 function MovieList({ genreId, index_ }) {
 	const elementRef = useRef(null);
@@ -31,7 +33,16 @@ function MovieList({ genreId, index_ }) {
 			<div
 				className='flex overflow-x-auto gap-8 scrollbar-none scroll-smooth pt-4 px-3 pb-4'
 				ref={elementRef}>
-				{isLoading && <div className='text-white'>Loading…</div>}
+				{isLoading && (
+					<div className='flex gap-8'>
+						{Array.from({ length: 6 }).map((_, i) => (
+							<Skeleton
+								key={i}
+								className={`${index_ % 3 == 0 ? 'w-[260px] h-[150px]' : 'w-[110px] h-[165px] md:w-[200px] md:h-[300px]'} rounded-lg`}
+							/>
+						))}
+					</div>
+				)}
 				{isError && <div className='text-red-400'>Failed to load movies.</div>}
 				{data &&
 					data.map((item) =>
@@ -53,3 +64,8 @@ function MovieList({ genreId, index_ }) {
 }
 
 export default MovieList;
+
+MovieList.propTypes = {
+	genreId: PropTypes.number.isRequired,
+	index_: PropTypes.number.isRequired,
+};

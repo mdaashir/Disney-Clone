@@ -2,6 +2,7 @@ import { useRef } from 'react';
 import { HiChevronRight, HiChevronLeft } from 'react-icons/hi2';
 import GlobalApi, { imageBaseUrl } from '../Services/GlobalApi';
 import { useQuery } from '@tanstack/react-query';
+import Skeleton from './Skeleton';
 
 function Slider() {
 	const elementRef = useRef(null);
@@ -37,8 +38,8 @@ function Slider() {
 				className='flex overflow-x-auto w-full px-16 py-4 scrollbar-none scroll-smooth'
 				ref={elementRef}>
 				{isLoading && (
-					<div className='w-full h-[310px] flex items-center justify-center text-white'>
-						Loading…
+					<div className='w-full flex'>
+						<Skeleton className='min-w-full md:h-[310px] h-[200px] mr-5' />
 					</div>
 				)}
 				{isError && (
