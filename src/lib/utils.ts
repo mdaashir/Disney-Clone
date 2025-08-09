@@ -28,14 +28,19 @@ export function formatRating(rating: number): string {
   return (rating / 10).toFixed(1);
 }
 
-export function generateImageUrl(path: string | null, size: string = "w500"): string {
+export function generateImageUrl(
+  path: string | null,
+  size: string = "w500",
+): string {
   if (!path) return "/placeholder-movie.jpg";
   return `https://image.tmdb.org/t/p/${size}${path}`;
 }
 
+// eslint-disable-next-line no-unused-vars
 export function debounce<T extends (...args: any[]) => void>(
   func: T,
-  delay: number
+  delay: number,
+  // eslint-disable-next-line no-unused-vars
 ): (...args: Parameters<T>) => void {
   let timeoutId: NodeJS.Timeout;
 
@@ -45,9 +50,11 @@ export function debounce<T extends (...args: any[]) => void>(
   };
 }
 
+// eslint-disable-next-line no-unused-vars
 export function throttle<T extends (...args: any[]) => void>(
   func: T,
-  limit: number
+  limit: number,
+  // eslint-disable-next-line no-unused-vars
 ): (...args: Parameters<T>) => void {
   let inThrottle: boolean;
 
@@ -65,11 +72,11 @@ export function generateRandomId(): string {
 }
 
 export function sleep(ms: number): Promise<void> {
-  return new Promise(resolve => setTimeout(resolve, ms));
+  return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
 export function isValidImageUrl(url: string): boolean {
-  return Boolean(url && !url.includes('null') && url.startsWith('http'));
+  return Boolean(url && !url.includes("null") && url.startsWith("http"));
 }
 
 export function getRelativeTime(date: Date | string): string {
@@ -89,9 +96,9 @@ export function getRelativeTime(date: Date | string): string {
   for (const [unit, seconds] of Object.entries(intervals)) {
     const interval = Math.floor(diffInSeconds / seconds);
     if (interval >= 1) {
-      return `${interval} ${unit}${interval === 1 ? '' : 's'} ago`;
+      return `${interval} ${unit}${interval === 1 ? "" : "s"} ago`;
     }
   }
 
-  return 'Just now';
+  return "Just now";
 }

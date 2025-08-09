@@ -6,42 +6,43 @@ import { fileURLToPath, URL } from "node:url";
 export default defineConfig({
   plugins: [
     react(),
-    VitePWA({
-      registerType: "autoUpdate",
-      workbox: {
-        globPatterns: ["**/*.{js,css,html,ico,png,svg,mp4}"],
-        runtimeCaching: [
-          {
-            urlPattern: /^https:\/\/api\.themoviedb\.org\/.*/i,
-            handler: "CacheFirst",
-            options: {
-              cacheName: "tmdb-api-cache",
-              expiration: {
-                maxEntries: 10,
-                maxAgeSeconds: 60 * 60 * 24 * 365, // <== 365 days
-              },
-              cacheKeyWillBeUsed: async ({ request }) => {
-                return `${request.url}`;
-              },
-            },
-          },
-        ],
-      },
-      includeAssets: ["favicon.ico", "apple-touch-icon.png", "masked-icon.svg"],
-      manifest: {
-        name: "Disney+ Clone",
-        short_name: "Disney+",
-        description: "A premium Disney+ streaming platform clone",
-        theme_color: "#000000",
-        icons: [
-          {
-            src: "Disney.ico",
-            sizes: "192x192",
-            type: "image/png",
-          },
-        ],
-      },
-    }),
+    // Temporarily disabled PWA for testing
+    // VitePWA({
+    //   registerType: "autoUpdate",
+    //   workbox: {
+    //     globPatterns: ["**/*.{js,css,html,ico,png,svg,mp4}"],
+    //     runtimeCaching: [
+    //       {
+    //         urlPattern: /^https:\/\/api\.themoviedb\.org\/.*/i,
+    //         handler: "CacheFirst",
+    //         options: {
+    //           cacheName: "tmdb-api-cache",
+    //           expiration: {
+    //             maxEntries: 10,
+    //             maxAgeSeconds: 60 * 60 * 24 * 365, // <== 365 days
+    //           },
+    //           cacheKeyWillBeUsed: async ({ request }) => {
+    //             return `${request.url}`;
+    //           },
+    //         },
+    //       },
+    //     ],
+    //   },
+    //   includeAssets: ["favicon.ico", "apple-touch-icon.png", "masked-icon.svg"],
+    //   manifest: {
+    //     name: "Disney+ Clone",
+    //     short_name: "Disney+",
+    //     description: "A premium Disney+ streaming platform clone",
+    //     theme_color: "#000000",
+    //     icons: [
+    //       {
+    //         src: "Disney.ico",
+    //         sizes: "192x192",
+    //         type: "image/png",
+    //       },
+    //     ],
+    //   },
+    // }),
   ],
   assetsInclude: ["**/*.png", "**/*.mp4"],
   base: "/Disney-Clone",

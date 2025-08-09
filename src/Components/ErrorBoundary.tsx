@@ -51,7 +51,8 @@ class ErrorBoundary extends Component<Props, State> {
                 Something went wrong
               </h1>
               <p className="text-muted-foreground">
-                We apologize for the inconvenience. An unexpected error has occurred.
+                We apologize for the inconvenience. An unexpected error has
+                occurred.
               </p>
 
               {import.meta.env.DEV && this.state.error && (

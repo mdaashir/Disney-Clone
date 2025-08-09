@@ -1,3 +1,5 @@
+import PropTypes from 'prop-types';
+
 // Generic pulse skeleton block
 export function SkeletonBlock({ className = "" }) {
   return (
@@ -7,6 +9,10 @@ export function SkeletonBlock({ className = "" }) {
     />
   );
 }
+
+SkeletonBlock.propTypes = {
+  className: PropTypes.string,
+};
 
 export function SliderSkeleton({ count = 3 }) {
   return (
@@ -20,6 +26,10 @@ export function SliderSkeleton({ count = 3 }) {
     </div>
   );
 }
+
+SliderSkeleton.propTypes = {
+  count: PropTypes.number,
+};
 
 export function MovieRowSkeleton({ count = 8, variant = "poster" }) {
   return (
@@ -38,12 +48,9 @@ export function MovieRowSkeleton({ count = 8, variant = "poster" }) {
   );
 }
 
-import PropTypes from "prop-types";
-SkeletonBlock.propTypes = { className: PropTypes.string };
-SliderSkeleton.propTypes = { count: PropTypes.number };
 MovieRowSkeleton.propTypes = {
   count: PropTypes.number,
-  variant: PropTypes.string,
+  variant: PropTypes.oneOf(['poster', 'backdrop']),
 };
 
 export default { SkeletonBlock, SliderSkeleton, MovieRowSkeleton };

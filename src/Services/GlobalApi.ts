@@ -13,7 +13,7 @@ import tmdbApi, {
   fetchMovieGenres,
   getImageUrl,
   getPosterUrl,
-  getBackdropUrl
+  getBackdropUrl,
 } from "@/api/tmdb";
 
 // Modern API exports
@@ -37,6 +37,7 @@ export {
 
 // Legacy compatibility layer (to be removed in future versions)
 export const getTrendingVideos = () => ({
+  // eslint-disable-next-line no-unused-vars
   then: (cb: (data: { data: { results: any[] } }) => void) =>
     Promise.resolve(fetchTrending()).then((results) =>
       cb({ data: { results } }),
@@ -44,6 +45,7 @@ export const getTrendingVideos = () => ({
 });
 
 export const getMovieByGenreId = (id: number) => ({
+  // eslint-disable-next-line no-unused-vars
   then: (cb: (data: { data: { results: any[] } }) => void) =>
     Promise.resolve(fetchByGenre(id)).then((results) =>
       cb({ data: { results } }),

@@ -12,13 +12,24 @@ import {
   X,
   Moon,
   Sun,
-  Monitor
+  Monitor,
+  User,
+  LogIn,
 } from "lucide-react";
 import { Button } from "@/Components/ui/button";
 import { Input } from "@/Components/ui/input";
-import { Tooltip, TooltipContent, TooltipTrigger, TooltipProvider } from "@/Components/ui/tooltip";
+import SearchInput from "@/Components/search/SearchInput";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+  TooltipProvider,
+} from "@/Components/ui/tooltip";
 import { useTheme, useScrollDirection } from "@/hooks";
 import { useAppStore } from "@/store";
+import { useAuth } from "@/contexts/AuthContext";
+import { AuthModal } from "@/Components/auth/AuthModal";
+import { UserProfile } from "@/Components/auth/UserProfile";
 import { cn } from "@/lib/utils";
 import logo from "@/Assets/Images/logo.png";
 
@@ -31,15 +42,19 @@ interface NavItem {
 
 const Header = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [isSearchFocused, setIsSearchFocused] = useState(false);
+  const [showAuthModal, setShowAuthModal] = useState(false);
+  const [showUserProfile, setShowUserProfile] = useState(false);
+  const [authMode, setAuthMode] = useState<"login" | "signup">("login");
+
   const { theme, setTheme } = useTheme();
   const { searchQuery, setSearchQuery } = useAppStore(
     (state) => ({
       searchQuery: state.searchQuery,
       setSearchQuery: state.setSearchQuery,
     }),
-    shallow
+    shallow,
   );
+  const { user } = useAuth();
   const scrollDirection = useScrollDirection();
 
   const menuItems: NavItem[] = [
@@ -65,7 +80,7 @@ const Header = () => {
         transition={{ duration: 0.3 }}
         className={cn(
           "fixed top-0 left-0 right-0 z-50 transition-all duration-300",
-          "bg-background/80 backdrop-blur-lg border-b border-border"
+          "bg-background/80 backdrop-blur-lg border-b border-border",
         )}
       >
         <div className="container-padding">
@@ -94,7 +109,7 @@ const Header = () => {
                       className={cn(
                         "relative flex items-center space-x-2 px-4 py-2 text-sm font-medium transition-all duration-200",
                         "hover:text-disney-blue hover:bg-disney-blue/10",
-                        item.active && "text-disney-blue"
+                        item.active && "text-disney-blue",
                       )}
                     >
                       <item.icon className="h-4 w-4" />
@@ -116,29 +131,7 @@ const Header = () => {
 
             {/* Search Bar */}
             <div className="hidden md:flex items-center flex-1 max-w-md mx-8">
-              <div className="relative w-full">
-                <motion.div
-                  animate={{
-                    scale: isSearchFocused ? 1.02 : 1,
-                  }}
-                  transition={{ duration: 0.2 }}
-                  className="relative"
-                >
-                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                  <Input
-                    placeholder="Search movies, TV shows..."
-                    value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
-                    onFocus={() => setIsSearchFocused(true)}
-                    onBlur={() => setIsSearchFocused(false)}
-                    className={cn(
-                      "pl-10 pr-4 py-2 bg-secondary/50 border-0 rounded-full",
-                      "focus:bg-secondary focus:ring-2 focus:ring-disney-blue/50",
-                      "transition-all duration-200"
-                    )}
-                  />
-                </motion.div>
-              </div>
+              <SearchInput className="w-full" />
             </div>
 
             {/* Right Side Controls */}
@@ -151,7 +144,9 @@ const Header = () => {
                       <Button
                         variant={theme === option.value ? "default" : "ghost"}
                         size="icon"
-                        onClick={() => setTheme(option.value as "light" | "dark" | "system")}
+                        onClick={() =>
+                          setTheme(option.value as "light" | "dark" | "system")
+                        }
                         className="h-8 w-8"
                       >
                         <option.icon className="h-4 w-4" />
@@ -164,12 +159,57 @@ const Header = () => {
                 ))}
               </div>
 
+              {/* Authentication */}
+              {user ? (
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      onClick={() => setShowUserProfile(true)}
+                      className="h-8 w-8 rounded-full"
+                    >
+                      <User className="h-4 w-4" />
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <p>Profile ({user.name})</p>
+                  </TooltipContent>
+                </Tooltip>
+              ) : (
+                <div className="hidden sm:flex items-center space-x-2">
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => {
+                      setAuthMode("login");
+                      setShowAuthModal(true);
+                    }}
+                  >
+                    <LogIn className="h-4 w-4 mr-2" />
+                    Sign In
+                  </Button>
+                  <Button
+                    size="sm"
+                    onClick={() => {
+                      setAuthMode("signup");
+                      setShowAuthModal(true);
+                    }}
+                    className="bg-blue-600 hover:bg-blue-700"
+                  >
+                    Sign Up
+                  </Button>
+                </div>
+              )}
+
               {/* Mobile Search Button */}
               <Button
                 variant="ghost"
                 size="icon"
                 className="md:hidden"
-                onClick={() => {/* TODO: Implement mobile search */}}
+                onClick={() => {
+                  /* TODO: Implement mobile search */
+                }}
               >
                 <Search className="h-5 w-5" />
               </Button>
@@ -208,7 +248,7 @@ const Header = () => {
                     variant="ghost"
                     className={cn(
                       "w-full justify-start space-x-3 py-3 text-left",
-                      item.active && "bg-disney-blue/10 text-disney-blue"
+                      item.active && "bg-disney-blue/10 text-disney-blue",
                     )}
                     onClick={() => setIsMobileMenuOpen(false)}
                   >
@@ -240,7 +280,11 @@ const Header = () => {
                           key={option.value}
                           variant={theme === option.value ? "default" : "ghost"}
                           size="icon"
-                          onClick={() => setTheme(option.value as "light" | "dark" | "system")}
+                          onClick={() =>
+                            setTheme(
+                              option.value as "light" | "dark" | "system",
+                            )
+                          }
                           className="h-8 w-8"
                         >
                           <option.icon className="h-4 w-4" />
@@ -253,6 +297,19 @@ const Header = () => {
             </motion.div>
           )}
         </AnimatePresence>
+
+        {/* Authentication Modal */}
+        <AuthModal
+          isOpen={showAuthModal}
+          onClose={() => setShowAuthModal(false)}
+          defaultMode={authMode}
+        />
+
+        {/* User Profile Modal */}
+        <UserProfile
+          isOpen={showUserProfile}
+          onClose={() => setShowUserProfile(false)}
+        />
       </motion.header>
     </TooltipProvider>
   );

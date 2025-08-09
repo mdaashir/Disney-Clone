@@ -1,0 +1,116 @@
+{
+  "name": "Disney+ Clone - Streaming Platform",
+  "short_name": "Disney+ Clone",
+  "description": "A fully functional streaming platform clone with modern features",
+  "start_url": "/",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "theme_color": "#1e40af",
+  "background_color": "#0f172a",
+  "lang": "en",
+  "scope": "/",
+  "categories": ["entertainment", "video", "streaming"],
+  "dir": "ltr",
+  "icons": [
+    {
+      "src": "/Disney.ico",
+      "sizes": "32x32",
+      "type": "image/x-icon",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/Disney.ico",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/Disney.ico",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "/screenshots/desktop.png",
+      "sizes": "1280x720",
+      "type": "image/png",
+      "platform": "wide",
+      "label": "Desktop view of the streaming platform"
+    },
+    {
+      "src": "/screenshots/mobile.png",
+      "sizes": "390x844",
+      "type": "image/png",
+      "label": "Mobile view of the streaming platform"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Search Movies",
+      "short_name": "Search",
+      "description": "Search for movies and TV shows",
+      "url": "/search",
+      "icons": [
+        {
+          "src": "/Disney.ico",
+          "sizes": "96x96"
+        }
+      ]
+    },
+    {
+      "name": "My Watchlist",
+      "short_name": "Watchlist",
+      "description": "View your saved movies and shows",
+      "url": "/watchlist",
+      "icons": [
+        {
+          "src": "/Disney.ico",
+          "sizes": "96x96"
+        }
+      ]
+    },
+    {
+      "name": "Discover",
+      "short_name": "Discover",
+      "description": "Discover new movies and shows",
+      "url": "/discover",
+      "icons": [
+        {
+          "src": "/Disney.ico",
+          "sizes": "96x96"
+        }
+      ]
+    }
+  ],
+  "features": ["offline", "push-notifications", "background-sync"],
+  "prefer_related_applications": false,
+  "edge_side_panel": {
+    "preferred_width": 400
+  },
+  "file_handlers": [
+    {
+      "action": "/watch",
+      "accept": {
+        "video/*": [".mp4", ".webm", ".mov"]
+      }
+    }
+  ],
+  "protocol_handlers": [
+    {
+      "protocol": "disney",
+      "url": "/?movie=%s"
+    }
+  ],
+  "share_target": {
+    "action": "/share",
+    "method": "POST",
+    "enctype": "multipart/form-data",
+    "params": {
+      "title": "title",
+      "text": "text",
+      "url": "url"
+    }
+  }
+}

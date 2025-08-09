@@ -1,6 +1,6 @@
-import { useEffect, useState, useRef, useLayoutEffect } from 'react';
-import { shallow } from 'zustand/shallow';
-import { useAppStore } from '@/store';
+import { useEffect, useState, useRef, useLayoutEffect } from "react";
+import { shallow } from "zustand/shallow";
+import { useAppStore } from "@/store";
 
 export function useTheme() {
   const { theme, setTheme } = useAppStore(
@@ -8,17 +8,18 @@ export function useTheme() {
       theme: state.theme,
       setTheme: state.setTheme,
     }),
-    shallow
+    shallow,
   );
 
   useEffect(() => {
     const root = window.document.documentElement;
-    root.classList.remove('light', 'dark');
+    root.classList.remove("light", "dark");
 
-    if (theme === 'system') {
-      const systemTheme = window.matchMedia('(prefers-color-scheme: dark)').matches
-        ? 'dark'
-        : 'light';
+    if (theme === "system") {
+      const systemTheme = window.matchMedia("(prefers-color-scheme: dark)")
+        .matches
+        ? "dark"
+        : "light";
       root.classList.add(systemTheme);
     } else {
       root.classList.add(theme);
@@ -30,21 +31,24 @@ export function useTheme() {
 
 export function useLocalStorage<T>(
   key: string,
-  initialValue: T
+  initialValue: T,
+  // eslint-disable-next-line no-unused-vars
 ): [T, (value: T | ((val: T) => T)) => void] {
   const [storedValue, setStoredValue] = useState<T>(() => {
     try {
       const item = window.localStorage.getItem(key);
       return item ? JSON.parse(item) : initialValue;
-    } catch (error) {
-      console.warn(`Error reading localStorage key "${key}":`, error);
+    } catch {
+      console.warn(`Error reading localStorage key "${key}"`);
       return initialValue;
     }
   });
 
-  const setValue = (value: T | ((val: T) => T)) => {
+  // eslint-disable-next-line no-unused-vars
+  const setValue = (newValue: T | ((val: T) => T)) => {
     try {
-      const valueToStore = value instanceof Function ? value(storedValue) : value;
+      const valueToStore =
+        newValue instanceof Function ? newValue(storedValue) : newValue;
       setStoredValue(valueToStore);
       window.localStorage.setItem(key, JSON.stringify(valueToStore));
     } catch (error) {
@@ -81,9 +85,9 @@ export function useMediaQuery(query: string): boolean {
     }
 
     const listener = () => setMatches(media.matches);
-    media.addEventListener('change', listener);
+    media.addEventListener("change", listener);
 
-    return () => media.removeEventListener('change', listener);
+    return () => media.removeEventListener("change", listener);
   }, [matches, query]);
 
   return matches;
@@ -105,12 +109,12 @@ export function useKeyPress(targetKey: string): boolean {
       }
     };
 
-    window.addEventListener('keydown', downHandler);
-    window.addEventListener('keyup', upHandler);
+    window.addEventListener("keydown", downHandler);
+    window.addEventListener("keyup", upHandler);
 
     return () => {
-      window.removeEventListener('keydown', downHandler);
-      window.removeEventListener('keyup', upHandler);
+      window.removeEventListener("keydown", downHandler);
+      window.removeEventListener("keyup", upHandler);
     };
   }, [targetKey]);
 
@@ -119,7 +123,8 @@ export function useKeyPress(targetKey: string): boolean {
 
 export function useOnClickOutside<T extends HTMLElement = HTMLElement>(
   ref: React.RefObject<T>,
-  handler: (event: Event) => void
+  // eslint-disable-next-line no-unused-vars
+  handler: (event: Event) => void,
 ): void {
   useEffect(() => {
     const listener = (event: Event) => {
@@ -131,37 +136,42 @@ export function useOnClickOutside<T extends HTMLElement = HTMLElement>(
       handler(event);
     };
 
-    document.addEventListener('mousedown', listener);
-    document.addEventListener('touchstart', listener);
+    document.addEventListener("mousedown", listener);
+    document.addEventListener("touchstart", listener);
 
     return () => {
-      document.removeEventListener('mousedown', listener);
-      document.removeEventListener('touchstart', listener);
+      document.removeEventListener("mousedown", listener);
+      document.removeEventListener("touchstart", listener);
     };
   }, [ref, handler]);
 }
 
 export function useScrollDirection() {
-  const [scrollDirection, setScrollDirection] = useState<'up' | 'down' | null>(null);
+  const [scrollDirection, setScrollDirection] = useState<"up" | "down" | null>(
+    null,
+  );
 
   useEffect(() => {
     let lastScrollY = window.pageYOffset;
 
     const updateScrollDirection = () => {
       const scrollY = window.pageYOffset;
-      const direction = scrollY > lastScrollY ? 'down' : 'up';
+      const direction = scrollY > lastScrollY ? "down" : "up";
 
-      if (direction !== scrollDirection && (scrollY - lastScrollY > 10 || scrollY - lastScrollY < -10)) {
+      if (
+        direction !== scrollDirection &&
+        (scrollY - lastScrollY > 10 || scrollY - lastScrollY < -10)
+      ) {
         setScrollDirection(direction);
       }
 
       lastScrollY = scrollY > 0 ? scrollY : 0;
     };
 
-    window.addEventListener('scroll', updateScrollDirection);
+    window.addEventListener("scroll", updateScrollDirection);
 
     return () => {
-      window.removeEventListener('scroll', updateScrollDirection);
+      window.removeEventListener("scroll", updateScrollDirection);
     };
   }, [scrollDirection]);
 
@@ -170,8 +180,8 @@ export function useScrollDirection() {
 
 export function useWindowSize() {
   const [windowSize, setWindowSize] = useState({
-    width: typeof window !== 'undefined' ? window.innerWidth : 0,
-    height: typeof window !== 'undefined' ? window.innerHeight : 0,
+    width: typeof window !== "undefined" ? window.innerWidth : 0,
+    height: typeof window !== "undefined" ? window.innerHeight : 0,
   });
 
   useEffect(() => {
@@ -182,9 +192,9 @@ export function useWindowSize() {
       });
     }
 
-    window.addEventListener('resize', handleResize);
+    window.addEventListener("resize", handleResize);
 
-    return () => window.removeEventListener('resize', handleResize);
+    return () => window.removeEventListener("resize", handleResize);
   }, []);
 
   return windowSize;
@@ -192,9 +202,10 @@ export function useWindowSize() {
 
 export function useIsomorphicLayoutEffect(
   effect: () => void | (() => void),
-  deps?: React.DependencyList
+  deps?: React.DependencyList,
 ) {
-  const useEffectHook = typeof window !== 'undefined' ? useLayoutEffect : useEffect;
+  const useEffectHook =
+    typeof window !== "undefined" ? useLayoutEffect : useEffect;
   useEffectHook(effect, deps);
 }
 

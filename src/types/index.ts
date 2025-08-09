@@ -125,7 +125,7 @@ export interface MediaItem {
   popularity: number;
   vote_average: number;
   vote_count: number;
-  media_type: 'movie' | 'tv' | 'person';
+  media_type: "movie" | "tv" | "person";
 
   // Movie-specific properties (optional for TV shows)
   title?: string;
@@ -220,17 +220,177 @@ export interface User {
   email: string;
   name: string;
   avatar?: string;
+  createdAt: string;
+  lastLoginAt: string;
+  sessionToken?: string;
   preferences: {
-    theme: 'light' | 'dark' | 'system';
+    theme: "light" | "dark" | "system";
     language: string;
     notifications: boolean;
+    autoplay: boolean;
+    subtitles: boolean;
+    quality: "auto" | "hd" | "sd";
   };
   watchlist: number[];
   favorites: number[];
+  watchHistory: WatchHistoryItem[];
+  continueWatching: ContinueWatchingItem[];
+}
+
+export interface WatchHistoryItem {
+  id: number;
+  mediaType: "movie" | "tv";
+  watchedAt: string;
+  title: string;
+  poster_path: string;
+}
+
+export interface ContinueWatchingItem {
+  id: number;
+  mediaType: "movie" | "tv";
+  title: string;
+  poster_path: string;
+  progress: number; // 0-100 percentage
+  duration: number; // total duration in minutes
+  watchedDuration: number; // watched duration in minutes
+  lastWatchedAt: string;
+  episodeNumber?: number; // for TV shows
+  seasonNumber?: number; // for TV shows
+}
+
+export interface AuthContextType {
+  user: User | null;
+  // eslint-disable-next-line no-unused-vars
+  login: (email: string, password: string) => Promise<boolean>;
+  signup: (
+    // eslint-disable-next-line no-unused-vars
+    email: string,
+    // eslint-disable-next-line no-unused-vars
+    password: string,
+    // eslint-disable-next-line no-unused-vars
+    name: string,
+  ) => Promise<boolean>;
+  logout: () => void;
+  // eslint-disable-next-line no-unused-vars
+  updateProfile: (updates: Partial<User>) => Promise<boolean>;
+  isLoading: boolean;
+  error: string | null;
+}
+
+export interface VideoPlayerState {
+  isPlaying: boolean;
+  currentTime: number;
+  duration: number;
+  volume: number;
+  isMuted: boolean;
+  isFullscreen: boolean;
+  quality: "auto" | "hd" | "sd";
+  subtitles: boolean;
+  playbackRate: number;
+}
+
+export interface Comment {
+  id: string;
+  userId: string;
+  userName: string;
+  userAvatar?: string;
+  content: string;
+  rating: number; // 1-5 stars
+  createdAt: string;
+  likes: number;
+  isLiked: boolean;
+}
+
+export interface Review {
+  id: string;
+  author: string;
+  author_details: {
+    name: string;
+    username: string;
+    avatar_path: string | null;
+    rating: number | null;
+  };
+  content: string;
+  created_at: string;
+  updated_at: string;
+  url: string;
+}
+
+export interface SearchSuggestion {
+  id: number;
+  title: string;
+  mediaType: "movie" | "tv" | "person";
+  year?: string;
+  poster_path?: string;
+  overview?: string;
+}
+
+export interface SearchState {
+  query: string;
+  results: Movie[];
+  suggestions: SearchSuggestion[];
+  history: string[];
+  isLoading: boolean;
+  filters: {
+    genre: string;
+    year: string;
+    rating: string;
+    sortBy: "popularity" | "rating" | "release_date" | "alphabetical";
+  };
+}
+
+export interface SearchContextType extends SearchState {
+  // eslint-disable-next-line no-unused-vars
+  searchMovies: (query: string) => void;
+  // eslint-disable-next-line no-unused-vars
+  getSuggestions: (query: string) => void;
+  // eslint-disable-next-line no-unused-vars
+  setQuery: (query: string) => void;
+  // eslint-disable-next-line no-unused-vars
+  setFilters: (filters: Partial<SearchState["filters"]>) => void;
+  clearHistory: () => void;
+  clearSearch: () => void;
+}
+
+export interface WatchlistState {
+  watchlist: Movie[];
+  favorites: Movie[];
+  isLoading: boolean;
+}
+
+export interface WatchlistContextType extends WatchlistState {
+  // eslint-disable-next-line no-unused-vars
+  addToWatchlist: (movie: Movie) => void;
+  // eslint-disable-next-line no-unused-vars
+  removeFromWatchlist: (movieId: number) => void;
+  // eslint-disable-next-line no-unused-vars
+  toggleWatchlist: (movie: Movie) => void;
+  // eslint-disable-next-line no-unused-vars
+  addToFavorites: (movie: Movie) => void;
+  // eslint-disable-next-line no-unused-vars
+  removeFromFavorites: (movieId: number) => void;
+  // eslint-disable-next-line no-unused-vars
+  toggleFavorites: (movie: Movie) => void;
+  // eslint-disable-next-line no-unused-vars
+  isInWatchlist: (movieId: number) => boolean;
+  // eslint-disable-next-line no-unused-vars
+  isInFavorites: (movieId: number) => boolean;
+  clearWatchlist: () => void;
+  clearFavorites: () => void;
+}
+
+export interface NotificationItem {
+  id: string;
+  type: "info" | "success" | "warning" | "error";
+  title: string;
+  message: string;
+  timestamp: string;
+  read: boolean;
+  actionUrl?: string;
 }
 
 export interface Theme {
-  mode: 'light' | 'dark' | 'system';
+  mode: "light" | "dark" | "system";
 }
 
 export interface AppState {
@@ -241,9 +401,13 @@ export interface AppState {
   error: string | null;
 }
 
-export type MediaType = 'movie' | 'tv' | 'all';
-export type TimeWindow = 'day' | 'week';
-export type SortBy = 'popularity.desc' | 'release_date.desc' | 'vote_average.desc' | 'title.asc';
+export type MediaType = "movie" | "tv" | "all";
+export type TimeWindow = "day" | "week";
+export type SortBy =
+  | "popularity.desc"
+  | "release_date.desc"
+  | "vote_average.desc"
+  | "title.asc";
 
 export interface SearchFilters {
   mediaType: MediaType;
