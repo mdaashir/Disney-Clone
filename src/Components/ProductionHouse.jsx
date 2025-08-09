@@ -1,5 +1,3 @@
-// @ts-nocheck
- 
 import disney from '../Assets/Images/disney.png';
 import marvel from '../Assets/Images/marvel.png';
 import nationalG from '../Assets/Images/nationalG.png';
@@ -14,30 +12,15 @@ import nationalGeographicV from '../Assets/Videos/national-geographic.mp4';
 
 function ProductionHouse() {
 	const productionHouseList = [
-		{
-			id: 1,
-			image: disney,
-			video: disneyV,
-		},
-		{
-			id: 2,
-			image: pixar,
-			video: pixarV,
-		},
-		{
-			id: 3,
-			image: marvel,
-			video: marvelV,
-		},
-		{
-			id: 4,
-			image: starwar,
-			video: starwarV,
-		},
+		{ id: 1, image: disney, video: disneyV, label: 'Disney' },
+		{ id: 2, image: pixar, video: pixarV, label: 'Pixar' },
+		{ id: 3, image: marvel, video: marvelV, label: 'Marvel' },
+		{ id: 4, image: starwar, video: starwarV, label: 'Star Wars' },
 		{
 			id: 5,
 			image: nationalG,
 			video: nationalGeographicV,
+			label: 'National Geographic',
 		},
 	];
 	return (
@@ -47,7 +30,7 @@ function ProductionHouse() {
 					className='border-[2px] border-gray-600 rounded-lg hover:scale-110 transition-all duration-300 ease-in-out cursor-pointer relative shadow-xl shadow-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-400'
 					key={item.id}
 					type='button'
-					aria-label={"Play " + item.id}>
+					aria-label={'Play ' + item.label}>
 					<video
 						src={item.video}
 						autoPlay
@@ -56,7 +39,11 @@ function ProductionHouse() {
 						muted
 						className='absolute top-0 rounded-md z-0 opacity-0 hover:opacity-50'
 					/>
-					<img src={item.image} alt='Brand logo' className='w-full z-[1] opacity-100' />
+					<img
+						src={item.image}
+						alt={item.label + ' brand logo'}
+						className='w-full z-[1] opacity-100'
+					/>
 				</button>
 			))}
 		</div>

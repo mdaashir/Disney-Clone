@@ -1,20 +1,20 @@
-import { useState } from 'react';
+import { Suspense, lazy } from 'react';
 import './App.css';
-import React from 'react';
 import Header from './Components/Header';
-import Slider from './Components/Slider';
-import ProductionHouse from './Components/ProductionHouse';
-import GenreMovieList from './Components/GenreMovieList';
+const Slider = lazy(() => import('./Components/Slider'));
+const ProductionHouse = lazy(() => import('./Components/ProductionHouse'));
+const GenreMovieList = lazy(() => import('./Components/GenreMovieList'));
 
 function App() {
-	const [count, setCount] = useState(0);
-
 	return (
 		<div>
 			<Header />
-			<Slider />
-			<ProductionHouse />
-			<GenreMovieList />
+			<Suspense
+				fallback={<div className='text-white p-8'>Loading content…</div>}>
+				<Slider />
+				<ProductionHouse />
+				<GenreMovieList />
+			</Suspense>
 		</div>
 	);
 }

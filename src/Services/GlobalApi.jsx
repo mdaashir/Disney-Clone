@@ -1,28 +1,18 @@
-import axios from 'axios';
+import { fetchTrending, fetchByGenre, imageBaseUrl } from '../api/tmdb';
 
-const API_KEY = import.meta.env.VITE_TMDB_API_KEY;
-const movieBaseUrl = 'https://api.themoviedb.org/3';
-export const imageBaseUrl = 'https://image.tmdb.org/t/p/original';
-
-// Axios instance for TMDB
-const apiClient = axios.create({
-	baseURL: movieBaseUrl,
-	params: {
-		api_key: API_KEY,
-	},
+// Backwards compatibility shim (to be removed)
+export const getTrendingVideos = () => ({
+	then: (cb) =>
+		Promise.resolve(fetchTrending()).then((results) =>
+			cb({ data: { results } })
+		),
 });
-
-apiClient.interceptors.response.use(
-	(res) => res,
-	(err) => {
-		// You can enhance logging here
-		return Promise.reject(err);
-	}
-);
-
-export const getTrendingVideos = () => apiClient.get('/trending/all/day');
-export const getMovieByGenreId = (id) =>
-	apiClient.get('/discover/movie', { params: { with_genres: id } });
+export const getMovieByGenreId = (id) => ({
+	then: (cb) =>
+		Promise.resolve(fetchByGenre(id)).then((results) =>
+			cb({ data: { results } })
+		),
+});
 
 export default {
 	getTrendingVideos,

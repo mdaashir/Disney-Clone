@@ -1,18 +1,16 @@
 import { useRef } from 'react';
-import PropTypes from 'prop-types';
-import GlobalApi from '../Services/GlobalApi';
 import MovieCard from './MovieCard';
 import { IoChevronBackOutline, IoChevronForwardOutline } from 'react-icons/io5';
 import HrMovieCard from './HrMovieCard';
 import { useQuery } from '@tanstack/react-query';
-import Skeleton from './Skeleton';
+import { MovieRowSkeleton } from './Skeletons';
+import { fetchByGenre } from '../api/tmdb';
 
 function MovieList({ genreId, index_ }) {
 	const elementRef = useRef(null);
 	const { data, isLoading, isError } = useQuery({
 		queryKey: ['genre', genreId],
-		queryFn: () =>
-			GlobalApi.getMovieByGenreId(genreId).then((r) => r.data.results),
+		queryFn: () => fetchByGenre(genreId),
 	});
 
 	const slideRight = (element) => {
@@ -34,14 +32,7 @@ function MovieList({ genreId, index_ }) {
 				className='flex overflow-x-auto gap-8 scrollbar-none scroll-smooth pt-4 px-3 pb-4'
 				ref={elementRef}>
 				{isLoading && (
-					<div className='flex gap-8'>
-						{Array.from({ length: 6 }).map((_, i) => (
-							<Skeleton
-								key={i}
-								className={`${index_ % 3 == 0 ? 'w-[260px] h-[150px]' : 'w-[110px] h-[165px] md:w-[200px] md:h-[300px]'} rounded-lg`}
-							/>
-						))}
-					</div>
+					<MovieRowSkeleton variant={index_ % 3 == 0 ? 'backdrop' : 'poster'} />
 				)}
 				{isError && <div className='text-red-400'>Failed to load movies.</div>}
 				{data &&
@@ -63,9 +54,10 @@ function MovieList({ genreId, index_ }) {
 	);
 }
 
-export default MovieList;
-
+import PropTypes from 'prop-types';
 MovieList.propTypes = {
 	genreId: PropTypes.number.isRequired,
 	index_: PropTypes.number.isRequired,
 };
+
+export default MovieList;
