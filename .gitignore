@@ -24,3 +24,9 @@ dist-ssr
 *.sw?
 .env*
 !.env.example
+
+# Test artifacts
+test-results/
+playwright-report/
+debug-*.png
+debug-*.spec.ts

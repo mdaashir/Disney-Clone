@@ -10,6 +10,7 @@ export default [
   js.configs.recommended,
   {
     files: ["**/*.{ts,tsx}"],
+    ignores: ["e2e/**/*", "playwright.config.ts"], // Ignore e2e files from main TypeScript config
     languageOptions: {
       parser: typescriptParser,
       parserOptions: {
@@ -194,6 +195,62 @@ export default [
       "no-console": ["warn", { allow: ["error", "warn"] }],
     },
     settings: { react: { version: "detect" } },
+  },
+  {
+    // Configuration for e2e test files and playwright config
+    files: ["e2e/**/*.ts", "playwright.config.ts"],
+    languageOptions: {
+      parser: typescriptParser,
+      parserOptions: {
+        ecmaVersion: 2023,
+        sourceType: "module",
+        // Don't use project for e2e files to avoid TypeScript project issues
+      },
+      globals: {
+        // Node.js globals for test environment
+        console: "readonly",
+        Buffer: "readonly",
+        process: "readonly",
+        global: "readonly",
+        __dirname: "readonly",
+        __filename: "readonly",
+        require: "readonly",
+        module: "readonly",
+        exports: "readonly",
+        setTimeout: "readonly",
+        clearTimeout: "readonly",
+        setInterval: "readonly",
+        clearInterval: "readonly",
+        // Browser globals needed in Playwright tests
+        window: "readonly",
+        document: "readonly",
+        navigator: "readonly",
+        localStorage: "readonly",
+        sessionStorage: "readonly",
+        performance: "readonly",
+        PerformanceNavigationTiming: "readonly",
+        Event: "readonly",
+        // Playwright globals
+        test: "readonly",
+        expect: "readonly",
+        describe: "readonly",
+        beforeEach: "readonly",
+        afterEach: "readonly",
+        beforeAll: "readonly",
+        afterAll: "readonly",
+      },
+    },
+    plugins: {
+      "@typescript-eslint": typescriptPlugin,
+    },
+    rules: {
+      "no-unused-vars": "off",
+      "@typescript-eslint/no-unused-vars": [
+        "warn",
+        { argsIgnorePattern: "^_", varsIgnorePattern: "^_" },
+      ],
+      "no-console": "off", // Allow console in tests
+    },
   },
   {
     files: ["tailwind.config.js", "vite.config.js", "vite.config.*.js"],

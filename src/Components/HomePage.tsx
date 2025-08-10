@@ -17,6 +17,7 @@ const LoadingFallback = () => (
 export default function HomePage() {
   return (
     <main className="pt-16 lg:pt-20">
+      <h1 className="sr-only">Disney+ Home - Movies, TV Shows and Originals</h1>
       <Suspense fallback={<LoadingFallback />}>
         <Slider />
         <ProductionHouse />

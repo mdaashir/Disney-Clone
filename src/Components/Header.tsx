@@ -99,7 +99,10 @@ const Header = () => {
             </motion.div>
 
             {/* Desktop Navigation */}
-            <nav className="hidden lg:flex items-center space-x-8">
+            <nav
+              className="hidden md:flex items-center space-x-8"
+              data-testid="desktop-navigation"
+            >
               {menuItems.map((item) => (
                 <Tooltip key={item.name}>
                   <TooltipTrigger asChild>
@@ -111,9 +114,10 @@ const Header = () => {
                         "hover:text-disney-blue hover:bg-disney-blue/10",
                         item.active && "text-disney-blue",
                       )}
+                      data-testid={`nav-${item.name.toLowerCase()}`}
                     >
                       <item.icon className="h-4 w-4" />
-                      <span className="hidden xl:block">{item.name}</span>
+                      <span className="hidden lg:block">{item.name}</span>
                       {item.active && (
                         <motion.div
                           layoutId="activeTab"
@@ -219,8 +223,11 @@ const Header = () => {
               <Button
                 variant="ghost"
                 size="icon"
-                className="lg:hidden"
+                className="md:hidden"
                 onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+                data-testid="mobile-menu-button"
+                aria-label="Toggle mobile menu"
+                aria-expanded={isMobileMenuOpen}
               >
                 {isMobileMenuOpen ? (
                   <X className="h-5 w-5" />
@@ -240,7 +247,8 @@ const Header = () => {
               animate={{ opacity: 1, height: "auto" }}
               exit={{ opacity: 0, height: 0 }}
               transition={{ duration: 0.2 }}
-              className="lg:hidden bg-background/95 backdrop-blur-lg border-t border-border"
+              className="md:hidden bg-background/95 backdrop-blur-lg border-t border-border"
+              data-testid="mobile-menu"
             >
               <div className="container-padding py-4 space-y-2">
                 {menuItems.map((item) => (
@@ -252,6 +260,7 @@ const Header = () => {
                       item.active && "bg-disney-blue/10 text-disney-blue",
                     )}
                     onClick={() => setIsMobileMenuOpen(false)}
+                    data-testid={`mobile-nav-${item.name.toLowerCase()}`}
                   >
                     <item.icon className="h-5 w-5" />
                     <span>{item.name}</span>
@@ -267,6 +276,7 @@ const Header = () => {
                       value={searchQuery}
                       onChange={(e) => setSearchQuery(e.target.value)}
                       className="pl-10 bg-secondary/50 border-0 rounded-full"
+                      data-testid="mobile-search-input"
                     />
                   </div>
                 </div>
@@ -287,6 +297,7 @@ const Header = () => {
                             )
                           }
                           className="h-8 w-8"
+                          data-testid={`mobile-theme-${option.value}`}
                         >
                           <option.icon className="h-4 w-4" />
                         </Button>

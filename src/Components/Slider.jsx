@@ -21,7 +21,7 @@ function Slider() {
   };
 
   return (
-    <div className="relative">
+    <div className="relative" data-testid="slider">
       <HiChevronLeft
         className="hidden md:block text-white text-[30px] absolute mx-8 mt-[155px] cursor-pointer"
         onClick={() => sliderLeft(elementRef.current)}

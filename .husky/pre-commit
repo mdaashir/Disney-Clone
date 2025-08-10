@@ -1,8 +1,0 @@
-#!/usr/bin/env sh
-# Husky hook (simplified for Windows Git Bash)
-. ././.husky/_/husky.sh || . .husky/_/husky.sh
-
-echo '🐶 Husky running pre-commit hook'
-
-npx lint-staged
-

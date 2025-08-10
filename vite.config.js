@@ -3,7 +3,7 @@ import react from "@vitejs/plugin-react-swc";
 import { VitePWA } from "vite-plugin-pwa";
 import { fileURLToPath, URL } from "node:url";
 
-export default defineConfig({
+export default defineConfig(({ command }) => ({
   plugins: [
     react(),
     VitePWA({
@@ -32,8 +32,8 @@ export default defineConfig({
         theme_color: "#000000",
         background_color: "#000000",
         display: "standalone",
-        scope: "/Disney-Clone/",
-        start_url: "/Disney-Clone/",
+        scope: command === "build" ? "/Disney-Clone/" : "/",
+        start_url: command === "build" ? "/Disney-Clone/" : "/",
         icons: [
           {
             src: "Disney.ico",
@@ -57,7 +57,7 @@ export default defineConfig({
     }),
   ],
   assetsInclude: ["**/*.png", "**/*.mp4"],
-  base: "/Disney-Clone",
+  base: command === "build" ? "/Disney-Clone" : "/",
   resolve: {
     alias: {
       "@": fileURLToPath(new URL("./src", import.meta.url)),
@@ -75,6 +75,15 @@ export default defineConfig({
   optimizeDeps: {
     include: ["react", "react-dom", "framer-motion"],
   },
+  server: {
+    host: true,
+    cors: true,
+    headers: {
+      "Access-Control-Allow-Origin": "*",
+      "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+      "Access-Control-Allow-Headers": "Content-Type, Authorization",
+    },
+  },
   build: {
     rollupOptions: {
       output: {
@@ -86,4 +95,4 @@ export default defineConfig({
       },
     },
   },
-});
+}));
